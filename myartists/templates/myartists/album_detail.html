@@ -1,0 +1,21 @@
+{% extends "myartists/base.html" %}
+
+{% block content %}
+
+<h1>
+    {{ album.name }}
+    {% if user == album.user %}
+        (<a href="{% url 'myartists:album_edit' album.artist.id album.id %}">edit</a>)
+    {% endif %}
+</h1>
+<p>{{ album.description }}</p>
+{% if album.image %}
+    <p><img src="{{ album.image.url }}"/></p>
+{% endif %}
+<p>Served by <a href="{% url 'myartists:artist_detail' album.artist.id %}">{{ album.artist.name }}</a></p>
+
+{% endblock %}
+
+{% block footer %}
+    Created by {{ album.user }} on {{ album.date }}
+{% endblock %}

@@ -43,7 +43,6 @@ class AlbumCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.album = Album.objects.get(id=self.kwargs['pk'])
         return super(AlbumCreate, self).form_valid(form)
 
 class SongDetail(DetailView):
@@ -57,7 +56,7 @@ class SongDetail(DetailView):
 
 class SongCreate(CreateView):
     model = Song
-    template_name = 'myartists/form.html'
+    template_name = 'myartists/form_song.html'
     form_class = SongForm
 
     def form_valid(self, form):

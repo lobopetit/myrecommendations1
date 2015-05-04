@@ -36,7 +36,6 @@ class Album(models.Model):
 class Song(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField('Euro amount', max_digits=8, decimal_places=2, blank=True, null=True)
     duration = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, default=1)
     date = models.DateField(default=date.today)

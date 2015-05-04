@@ -27,7 +27,7 @@
 </h2>
 <ul>
     {% for album in artist.albums.all %}
-        <li><a href="{% url 'myartists:album_create' artist.id album.id %}">{{ album.name }}</a></li>
+        <li><a href="{% url 'myartists:album_detail'  album.id %}">{{ album.name }}</a></li>
     {% empty %}
         <li>Sorry, no albums for this artist yet.</li>
     {% endfor %}

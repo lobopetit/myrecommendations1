@@ -93,7 +93,7 @@ urlpatterns = patterns('',
 
     # song song details, ex: /myartists/songs/1/songs/1/
     url(r'^songs/(?P<pkr>\d+)/songs/(?P<pk>\d+)/$',
-        DetailView.as_view(model=Song, template_name='song_detail.html'),
+        DetailView.as_view(model=Song, template_name='myartists/song_detail.html'),
         name='song_detail'),
 
     # Create a song song, ex: /myartists/songs/1/songs/create/

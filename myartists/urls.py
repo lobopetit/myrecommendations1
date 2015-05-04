@@ -80,8 +80,9 @@ urlpatterns = patterns('',
     # List latest 5 songs: /myartists/
     url(r'^$',Inici.as_view(),name='song_list'),
 
-    # Song details, ex.: /myartists/songs/1/
-    url(r'^songs/(?P<pk>\d+)/$', SongDetail.as_view(), name='song_detail'),
+    # Song details, ex.: /myartists/songs/1/songs/1
+    url(r'^songs/(?P<pk>\d+)/$',  DetailView.as_view(model=Song, template_name='myartists/song_detail.html'),
+        name='song_detail'),
 
     # Create a song: /myartists/songs/create/
     url(r'^songs/create/$', SongCreate.as_view(), name='song_create'),
@@ -90,11 +91,6 @@ urlpatterns = patterns('',
     url(r'^songs/(?P<pk>\d+)/edit/$',
         UpdateView.as_view(model=Song, form_class=SongForm, template_name='myartists/form.html'),
         name='song_edit'),
-
-    # song song details, ex: /myartists/songs/1/songs/1/
-    url(r'^songs/(?P<pkr>\d+)/songs/(?P<pk>\d+)/$',
-        DetailView.as_view(model=Song, template_name='myartists/song_detail.html'),
-        name='song_detail'),
 
     # Create a song song, ex: /myartists/songs/1/songs/create/
     url(r'^songs/(?P<pk>\d+)/songs/create/$',

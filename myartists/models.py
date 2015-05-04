@@ -36,10 +36,10 @@ class Album(models.Model):
 class Song(models.Model):
     name = models.TextField()
     description = models.TextField(blank=True, null=True)
-    duration = models.TextField(blank=True, null=True)
+    duration = models.TimeField()
     user = models.ForeignKey(User, default=1)
     date = models.DateField(default=date.today)
-    artist = models.ForeignKey(Artist, null=True, related_name='songs')
+    artist = models.ForeignKey(Album, null=True, related_name='songs')
 
     def __unicode__(self):
         return u"%s" % self.name

@@ -5,17 +5,16 @@
 <h1>
     {{ song.name }}
     {% if user == song.user %}
-        (<a href="{% url 'myartists:song_edit' song.artist.id song.id %}">edit</a>)
+        (<a href="{% url 'myartists:song_edit'  song.artist.id song.id %}">edit</a>)
     {% endif %}
 </h1>
 <p>{{ song.description }}</p>
 {% if song.image %}
     <p><img src="{{ song.image.url }}"/></p>
 {% endif %}
-<p>Served by <a href="{% url 'myartists:artist_detail' song.artist.id %}">{{ song.artist.name }}</a></p>
+<p>Served by <a href="{% url 'myartists:artist_detail' song.id %}">{{ song.artist.name }}</a></p>
 
 {% endblock %}
-
 {% block footer %}
     Created by {{ song.user }} on {{ song.date }}
 {% endblock %}

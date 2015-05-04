@@ -22,12 +22,12 @@
 <h2>
     Albums
     {% if user %}
-        (<a href="{% url 'myartists:dish_create' artist.id %}">add</a>)
+        (<a href="{% url 'myartists:album_create' artist.id %}">add</a>)
     {% endif %}
 </h2>
 <ul>
-    {% for dish in artist.albums.all %}
-        <li><a href="{% url 'myartists:dish_detail' artist.id dish.id %}">{{ dish.name }}</a></li>
+    {% for album in artist.albums.all %}
+        <li><a href="{% url 'myartists:album_create' artist.id album.id %}">{{ album.name }}</a></li>
     {% empty %}
         <li>Sorry, no albums for this artist yet.</li>
     {% endfor %}

@@ -10,7 +10,7 @@
 </h1>
 
 <ul>
-    {% for artist in latest_artist_list %}
+    {% for artist in artist_list %}
         <li><a href="{% url 'myartists:artist_detail' artist.id %}">{{ artist.name }}</a></li>
     {% empty %}
         <li>Sorry, no artists registered yet.</li>

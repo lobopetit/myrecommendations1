@@ -3,7 +3,7 @@
 from django.core import urlresolvers
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView
 
 from models import ArtistReview, Artist, Album
@@ -46,3 +46,9 @@ def review(request, pk):
         artist=artist)
     new_review.save()
     return HttpResponseRedirect(urlresolvers.reverse('myartists:artist_detail', args=(artist.id,)))
+
+class Inici(ListView):
+    model =  Artist
+    template_name = 'myartists/artist_list.html'
+    queryset = Artist.objects.all()
+    context_object_name='artists_list'

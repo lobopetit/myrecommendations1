@@ -4,16 +4,11 @@ from django.views.generic import DetailView, ListView, UpdateView
 
 from models import Artist, Album
 from forms import ArtistForm, AlbumForm
-from views import ArtistCreate, AlbumCreate, ArtistDetail
+from views import *
 
 urlpatterns = patterns('',
     # List latest 5 artists: /myartists/
-    url(r'^$',
-        ListView.as_view(
-            queryset=Artist.objects.filter(date__lte=timezone.now()).order_by('date')[:5],
-            context_object_name='latest_artist_list',
-            template_name='myartists/artist_list.html'),
-        name='artist_list'),
+    url(r'^$',Inici.as_view(),name='artist_list'),
 
     # Artist details, ex.: /myartists/artists/1/
     url(r'^artists/(?P<pk>\d+)/$',

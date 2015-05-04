@@ -10,3 +10,8 @@ class AlbumForm(ModelForm):
     class Meta:
         model = Album
         exclude = ('Artist', 'user', 'date',)
+
+class SongForm(ModelForm):
+    class Meta:
+        model = Album
+        exclude = ('Artist', 'user', 'date',)

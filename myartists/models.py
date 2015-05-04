@@ -59,3 +59,9 @@ class Review(models.Model):
 
 class ArtistReview(Review):
     artist = models.ForeignKey(Artist)
+
+class AlbumReview(Review):
+    album = models.ForeignKey(Artist)
+
+class SongReview(Review):
+    song = models.ForeignKey(Artist)

@@ -56,7 +56,7 @@ class SongDetail(DetailView):
 
 class SongCreate(CreateView):
     model = Song
-    template_name = 'myartists/form_song.html'
+    template_name = 'myartists/form.html'
     form_class = SongForm
 
     def form_valid(self, form):

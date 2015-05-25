@@ -1,10 +1,8 @@
 from django.conf.urls import patterns, url
-from django.utils import timezone
-from django.views.generic import DetailView, ListView, UpdateView
+from django.views.generic import UpdateView
 
-from models import Artist, Album
-from forms import ArtistForm, AlbumForm
 from views import *
+
 
 urlpatterns = patterns('',
     #URLS ARTISTS

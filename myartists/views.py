@@ -7,6 +7,7 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView
 
+from myartists.serializers import UserSerializer, GroupSerializer
 from models import ArtistReview, AlbumReview, SongReview, Artist, Album, Song
 from forms import ArtistForm, AlbumForm, SongForm
 
@@ -101,3 +102,4 @@ class Inici(ListView):
     template_name = 'myartists/artist_list.html'
     queryset = Artist.objects.all()
     context_object_name='artists_list'
+

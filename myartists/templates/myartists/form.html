@@ -20,7 +20,7 @@
                             featureClass: "P",
                             maxRows: 10,
                             name_startsWith: request.term,
-                            username: "demo"
+                            username: "lobopetit"
                         },
                         success: function( data ) {
                             response( $.map( data.geonames, function( item ) {
@@ -38,8 +38,6 @@
                 select: function( event, ui ) {
                     if (ui.item) {
                         $("#id_stateOrProvince").val(ui.item.stateOrProvince);
-                        $("#id_country").val(ui.item.countryName);
-                        $("#id_zipCode").val("");
                     }
                 }
             });

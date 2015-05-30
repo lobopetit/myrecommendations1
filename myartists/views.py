@@ -6,8 +6,9 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView
+from rest_framework import generics, permissions
 
-from myartists.serializers import UserSerializer, GroupSerializer
+from myartists.serializers import ArtistSerializer, AlbumSerializer, ArtistReviewSerializer
 from models import ArtistReview, AlbumReview, SongReview, Artist, Album, Song
 from forms import ArtistForm, AlbumForm, SongForm
 
@@ -102,4 +103,53 @@ class Inici(ListView):
     template_name = 'myartists/artist_list.html'
     queryset = Artist.objects.all()
     context_object_name='artists_list'
+
+### RESTful API views ###
+
+class IsOwnerOrReadOnly(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Instance must have an attribute named `owner`.
+        return obj.user == request.user
+
+class APIArtistList(generics.ListCreateAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = Artist
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+
+class APIArtistDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = Artist
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+
+class APIAlbumList(generics.ListCreateAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = Album
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+
+class APIAlbumDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = Album
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+
+class APIArtistReviewList(generics.ListCreateAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = ArtistReview
+    queryset = ArtistReview.objects.all()
+    serializer_class = ArtistReviewSerializer
+
+class APIArtistReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    model = ArtistReview
+    queryset = ArtistReview.objects.all()
+    serializer_class = ArtistReviewSerializer
 

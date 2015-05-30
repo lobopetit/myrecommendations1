@@ -1,6 +1,12 @@
 from django.conf.urls import patterns, url
 from django.views.generic import UpdateView
+from django.conf.urls import patterns, url, include
+from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView
+from rest_framework.urlpatterns import format_suffix_patterns
 
+from models import Album, Artist, Song
+from forms import ArtistForm, AlbumForm
 from views import *
 
 
@@ -108,3 +114,17 @@ urlpatterns = patterns('',
     # Create a song review using function, ex: /myartists/songs/1/reviews/create/
     url(r'^songs/(?P<pk>\d+)/reviews/create/$', 'myartists.views.review',  name='review_create'),
 )
+
+#RESTful API
+urlpatterns += patterns('',
+	url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+	url(r'^api/restaurants/$', APIArtistList.as_view(), name='restaurant-list'),
+	url(r'^api/restaurants/(?P<pk>\d+)/$', APIAlbumDetail.as_view(), name='restaurant-detail'),
+	url(r'^api/dishes/$', login_required(APIAlbumList.as_view()), name='dish-list'),
+	url(r'^api/dishes/(?P<pk>\d+)/$', APIArtistDetail.as_view(), name='dish-detail'),
+	url(r'^api/restaurantreviews/$', APIArtistReviewList.as_view(), name='restaurantreview-list'),
+	url(r'^api/restaurantreviews/(?P<pk>\d+)/$', APIArtistReviewDetail.as_view(), name='restaurantreview-detail'),
+)
+
+# Format suffixes
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api','json', 'xml'])

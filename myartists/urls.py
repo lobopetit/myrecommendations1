@@ -127,4 +127,4 @@ urlpatterns += patterns('',
 )
 
 # Format suffixes
-urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api','json', 'xml'])
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['api', 'json', 'xml'])

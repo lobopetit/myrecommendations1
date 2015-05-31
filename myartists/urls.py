@@ -28,6 +28,10 @@ urlpatterns = patterns('',
         UpdateView.as_view(model=Artist, form_class=ArtistForm, template_name='myartists/form.html'),
         name='artist_edit'),
 
+    # Delete a artist
+    url(r'^artists/(?P<pk>\d+)/delete/$',ArtistDelete.as_view(), name='artist_delete'),
+
+
     # Artist album details, ex: /myartists/artists/1/albums/1/
     url(r'^artists/(?P<pkr>\d+)/albums/(?P<pk>\d+)/$',
         DetailView.as_view(model=Album, template_name='album_detail.html'),
@@ -37,6 +41,10 @@ urlpatterns = patterns('',
     url(r'^artists/(?P<pk>\d+)/albums/create/$',
         AlbumCreate.as_view(),
         name='album_create'),
+
+    # Delete an album
+    url(r'^artists/(?P<pk>\d+)/delete/$',AlbumDelete.as_view(), name='album_delete'),
+
 
     # Edit artist album details, ex: /myartists/artists/1/albums/1/edit/
     url(r'^artists/(?P<pkr>\d+)/albums/(?P<pk>\d+)/edit/$',
@@ -56,6 +64,7 @@ urlpatterns = patterns('',
 
     # Create a album: /myartists/albums/create/
     url(r'^albums/create/$', AlbumCreate.as_view(), name='album_create'),
+
 
     # Edit album details, ex: /myartists/albums/1/edit/
     url(r'^albums/(?P<pk>\d+)/edit/$',

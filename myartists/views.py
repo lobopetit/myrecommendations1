@@ -3,7 +3,7 @@ from django.core import serializers
 from django.core import urlresolvers
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, DeleteView
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView
 from rest_framework import generics, permissions
@@ -54,6 +54,12 @@ class ArtistCreate(CreateView):
         form.instance.user = self.request.user
         return super(ArtistCreate, self).form_valid(form)
 
+class ArtistDelete(DeleteView):
+    model = Artist
+    success_url = "/app/Artist"
+    template_name = 'artist_delete.html'
+
+
 class AlbumDetail(DetailView):
     model = Album
     template_name = 'myartists/album_detail.html'
@@ -71,6 +77,11 @@ class AlbumCreate(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(AlbumCreate, self).form_valid(form)
+
+class AlbumDelete(DeleteView):
+    model = Album
+    success_url = "/app/Album"
+    template_name = 'album_delete.html'
 
 class SongDetail(DetailView):
     model = Artist
@@ -90,6 +101,11 @@ class SongCreate(CreateView):
         form.instance.user = self.request.user
         return super(SongCreate, self).form_valid(form)
 
+class SongDelete(DeleteView):
+    model = Song
+    success_url = "/app/Song"
+    template_name = 'song_delete.html'
+
 def review(request, pk):
     artist = get_object_or_404(Artist, pk=pk)
     new_review = ArtistReview(
@@ -106,19 +122,22 @@ class Inici(ListView):
     queryset = Artist.objects.all()
     context_object_name='artists_list'
 
+
 ### RESTful API views ###
 
-class ArtistViewSet(viewsets.ModelViewSet):
+class ArtistViewSet(generics.ListCreateAPIView):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = Album.objects.all()
+    model = Artist
+    queryset = Artist.objects.all()
     serializer_class = serializers.ArtistSerializer
 
-class AlbumViewSet(viewsets.ModelViewSet):
+class AlbumViewSet(generics.ListCreateAPIView):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint that allows albums to be viewed or edited.
     """
+    model = Album
     queryset = Album.objects.all()
     serializer_class = serializers.AlbumSerializer
 

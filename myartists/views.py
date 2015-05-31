@@ -7,6 +7,8 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView
 from rest_framework import generics, permissions
+from myartists import serializers
+from rest_framework import viewsets
 
 from myartists.serializers import ArtistSerializer, AlbumSerializer, ArtistReviewSerializer
 from models import ArtistReview, AlbumReview, SongReview, Artist, Album, Song
@@ -105,6 +107,20 @@ class Inici(ListView):
     context_object_name='artists_list'
 
 ### RESTful API views ###
+
+class ArtistViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Album.objects.all()
+    serializer_class = serializers.ArtistSerializer
+
+class AlbumViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Album.objects.all()
+    serializer_class = serializers.AlbumSerializer
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
 

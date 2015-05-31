@@ -5,15 +5,15 @@ from models import Artist, Album, ArtistReview
 
 
 class ArtistSerializer(HyperlinkedModelSerializer):
-	url = HyperlinkedIdentityField(view_name='myartists:artist-detail')
-	albums = HyperlinkedRelatedField(many=True, read_only=True, view_name='myartists:album-detail')
-	artistreview_set = HyperlinkedRelatedField(many=True, read_only=True, view_name='myartists:artistreview-detail')
+	#url = HyperlinkedIdentityField(view_name='myartists:artist-detail')
+	#albums = HyperlinkedRelatedField(many=True, read_only=True, view_name='myartists:album-detail')
+	#artistreview_set = HyperlinkedRelatedField(many=True, read_only=True, view_name='myartists:artistreview-detail')
 	user = CharField(read_only=True)
 
 	class Meta:
 		model = Artist
-		fields = ('url', 'name', 'city', 'country', 'style', 'web', 'user', 'date', 'albums', 'artistreview_set')
-
+		#fields = ('url', 'name', 'city', 'country', 'style', 'web', 'user', 'date', 'albums', 'artistreview_set')
+        fields = ('name', 'city', 'country', 'style', 'web')
 
 class AlbumSerializer(HyperlinkedModelSerializer):
 	url = HyperlinkedIdentityField(view_name='myartists:album-detail')

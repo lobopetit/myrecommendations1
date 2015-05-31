@@ -4,11 +4,12 @@ from django.conf.urls import patterns, url, include
 from django.contrib.auth.decorators import login_required
 from django.views.generic import DetailView
 from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework import routers
 
 from models import Album, Artist, Song
 from forms import ArtistForm, AlbumForm
 from views import *
-
+from myartists import views
 
 urlpatterns = patterns('',
     #URLS ARTISTS
@@ -116,14 +117,21 @@ urlpatterns = patterns('',
 )
 
 #RESTful API
+
+router = routers.DefaultRouter()
+router.register(r'artists', views.AlbumViewSet)
+router.register(r'albums', views.AlbumViewSet)
+
+
 urlpatterns += patterns('',
+    url(r'^api/', include(router.urls)),
 	url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
-	url(r'^api/restaurants/$', APIArtistList.as_view(), name='restaurant-list'),
-	url(r'^api/restaurants/(?P<pk>\d+)/$', APIAlbumDetail.as_view(), name='restaurant-detail'),
-	url(r'^api/dishes/$', login_required(APIAlbumList.as_view()), name='dish-list'),
-	url(r'^api/dishes/(?P<pk>\d+)/$', APIArtistDetail.as_view(), name='dish-detail'),
-	url(r'^api/restaurantreviews/$', APIArtistReviewList.as_view(), name='restaurantreview-list'),
-	url(r'^api/restaurantreviews/(?P<pk>\d+)/$', APIArtistReviewDetail.as_view(), name='restaurantreview-detail'),
+	url(r'^api/artists/$', APIArtistList.as_view(), name='artist-list'),
+	url(r'^api/artists/(?P<pk>\d+)/$', APIAlbumDetail.as_view(), name='artist-detail'),
+	url(r'^api/albums/$', login_required(APIAlbumList.as_view()), name='album-list'),
+	url(r'^api/albums/(?P<pk>\d+)/$', APIArtistDetail.as_view(), name='album-detail'),
+	url(r'^api/artistreviews/$', APIArtistReviewList.as_view(), name='artistreview-list'),
+	url(r'^api/artistreviews/(?P<pk>\d+)/$', APIArtistReviewDetail.as_view(), name='artistreview-detail'),
 )
 
 # Format suffixes

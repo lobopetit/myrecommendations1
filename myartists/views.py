@@ -3,38 +3,51 @@ from django.core import serializers
 from django.core import urlresolvers
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView, ListView, DeleteView
+from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.edit import CreateView
 from rest_framework import generics, permissions
 from myartists import serializers
 from rest_framework import viewsets
-
+from django.utils import timezone
 from myartists.serializers import ArtistSerializer, AlbumSerializer, ArtistReviewSerializer
 from models import ArtistReview, AlbumReview, SongReview, Artist, Album, Song
 from forms import ArtistForm, AlbumForm, SongForm
 
-class ConneqResponseMixin(TemplateResponseMixin):
+class ConnegResponseMixin(TemplateResponseMixin):
+
     def render_json_object_response(self, objects, **kwargs):
         json_data = serializers.serialize(u"json", objects, **kwargs)
-        return HttpResponse(json_data, concent_type=u"application/json")
+        return HttpResponse(json_data, content_type=u"application/json")
 
     def render_xml_object_response(self, objects, **kwargs):
         xml_data = serializers.serialize(u"xml", objects, **kwargs)
-        return HttpResponse(xml_data, concent_type=u"application/xml")
+        return HttpResponse(xml_data, content_type=u"application/xml")
 
-    def render_to_response(self, context, **response_kwargs):
+    def render_to_response(self, context, **kwargs):
         if 'extension' in self.kwargs:
             try:
                 objects = [self.object]
             except AttributeError:
                 objects = self.object_list
             if self.kwargs['extension'] == 'json':
-                return self.render_json_object_response(objects = objects)
+                return self.render_json_object_response(objects=objects)
             elif self.kwargs['extension'] == 'xml':
-                return self.render_xml_object_response(objects = objects)
+                return self.render_xml_object_response(objects=objects)
         else:
-            return super (ConneqResponseMixin, self).render_to_response(context)
+            return super(ConnegResponseMixin, self).render_to_response(context)
+
+class Inici(ListView):
+    model = Artist
+    template_name = 'myartists/artist_list.html'
+    queryset = Artist.objects.all()
+    context_object_name = 'artists_list'
+
+class ArtistList(ListView, ConnegResponseMixin):
+    model = Artist
+    queryset = Artist.objects.filter(date__lte=timezone.now()).order_by('date')[:5]
+    context_object_name = 'latest_artist_list'
+    template_name = 'myartists/artist_list.html'
 
 class ArtistDetail(DetailView):
     model = Artist
@@ -54,12 +67,6 @@ class ArtistCreate(CreateView):
         form.instance.user = self.request.user
         return super(ArtistCreate, self).form_valid(form)
 
-class ArtistDelete(DeleteView):
-    model = Artist
-    success_url = "/app/Artist"
-    template_name = 'artist_delete.html'
-
-
 class AlbumDetail(DetailView):
     model = Album
     template_name = 'myartists/album_detail.html'
@@ -76,12 +83,8 @@ class AlbumCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.artist = Artist.objects.get(id=self.kwargs['pk'])
         return super(AlbumCreate, self).form_valid(form)
-
-class AlbumDelete(DeleteView):
-    model = Album
-    success_url = "/app/Album"
-    template_name = 'album_delete.html'
 
 class SongDetail(DetailView):
     model = Artist
@@ -101,11 +104,6 @@ class SongCreate(CreateView):
         form.instance.user = self.request.user
         return super(SongCreate, self).form_valid(form)
 
-class SongDelete(DeleteView):
-    model = Song
-    success_url = "/app/Song"
-    template_name = 'song_delete.html'
-
 def review(request, pk):
     artist = get_object_or_404(Artist, pk=pk)
     new_review = ArtistReview(
@@ -116,28 +114,19 @@ def review(request, pk):
     new_review.save()
     return HttpResponseRedirect(urlresolvers.reverse('myartists:artist_detail', args=(artist.id,)))
 
-class Inici(ListView):
-    model =  Artist
-    template_name = 'myartists/artist_list.html'
-    queryset = Artist.objects.all()
-    context_object_name='artists_list'
-
-
 ### RESTful API views ###
 
-class ArtistViewSet(generics.ListCreateAPIView):
+class ArtistViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    model = Artist
-    queryset = Artist.objects.all()
+    queryset = Album.objects.all()
     serializer_class = serializers.ArtistSerializer
 
-class AlbumViewSet(generics.ListCreateAPIView):
+class AlbumViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows albums to be viewed or edited.
+    API endpoint that allows users to be viewed or edited.
     """
-    model = Album
     queryset = Album.objects.all()
     serializer_class = serializers.AlbumSerializer
 
@@ -187,4 +176,3 @@ class APIArtistReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     model = ArtistReview
     queryset = ArtistReview.objects.all()
     serializer_class = ArtistReviewSerializer
-

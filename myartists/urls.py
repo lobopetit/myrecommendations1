@@ -11,6 +11,7 @@ from forms import ArtistForm, AlbumForm
 from views import *
 from myartists import views
 
+
 urlpatterns = patterns('',
     #URLS ARTISTS
 
